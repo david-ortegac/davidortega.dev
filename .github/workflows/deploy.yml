@@ -21,7 +21,7 @@ jobs:
           echo "DIST=$DIST" >> $GITHUB_OUTPUT
 
       - name: Deploy (FTPS)
-        uses: SamKirkland/FTP-Deploy-Action@v4
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server:     ${{ secrets.FTP_SERVER }}
           username:   ${{ secrets.FTP_USERNAME }}
