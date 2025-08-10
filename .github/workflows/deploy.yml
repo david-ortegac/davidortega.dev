@@ -2,7 +2,7 @@ name: Deploy Angular to cPanel
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
