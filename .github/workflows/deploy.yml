@@ -1,4 +1,4 @@
-name: Deploy Angular to cPanel (ftp-upload-action)
+name: Deploy Angular to cPanel (sebastianpopp/ftp-action)
 
 on:
   push:
@@ -8,7 +8,6 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
 
@@ -27,21 +26,23 @@ jobs:
       - name: Detect dist path
         id: paths
         run: |
-          DIST=$(node -e "const p=require('./angular.json');const proj=p.defaultProject||Object.keys(p.projects)[0];process.stdout.write(p.projects[proj].architect.build.options.outputPath)")
-          if [ -d \"$DIST/browser\" ]; then
-            echo \"LOCAL=$DIST/browser\" >> $GITHUB_OUTPUT
+          DIST=$(node -e "const p=require('./angular.json');const proj=p.defaultProject||Object.keys(p.projects)[0];process.stdout.write(p.projects[proj].architect.build.options.outputPath))"
+          if [ -d "$DIST/browser" ]; then
+            echo "LOCAL=$DIST/browser" >> $GITHUB_OUTPUT
           else
-            echo \"LOCAL=$DIST\" >> $GITHUB_OUTPUT
+            echo "LOCAL=$DIST" >> $GITHUB_OUTPUT
           fi
-          echo \"Using local dir: $(cat $GITHUB_OUTPUT | cut -d= -f2)\"
+          echo "Usando carpeta: $(cat $GITHUB_OUTPUT | cut -d= -f2)"
 
       - name: Upload via FTP
-        uses: genietim/ftp-action@releases/v4
+        uses: sebastianpopp/ftp-action@releases/v2
         with:
           host:       ${{ secrets.FTP_SERVER }}
           user:       ${{ secrets.FTP_USERNAME }}
           password:   ${{ secrets.FTP_PASSWORD }}
           localDir:   ${{ steps.paths.outputs.LOCAL }}
-          remoteDir:  public_html
-          # Activa FTPS (explícito). Si tu servidor solo acepta FTP sin TLS, cámbialo a false.
-          forceSsl:   false
+          remoteDir:  "public_html"
+          forceSsl:   true
+          # --delete elimina archivos obsoletos para espejar public_html con tu dist
+          # (si no quieres borrar nada, quita --delete)
+          options:    "--verbose"
