@@ -2,7 +2,7 @@ name: Deploy Angular to cPanel
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "master" ]
   workflow_dispatch:
 
 jobs:
@@ -25,23 +25,32 @@ jobs:
       - name: Build Angular (production)
         run: npm run build -- --configuration=production
 
-      # Detecta la carpeta de salida automáticamente desde angular.json
-      - name: Detect dist folder
+      - name: Detect dist folder from angular.json
         id: dist
         run: |
-          node -e "const p=require('./angular.json');const proj=p.defaultProject||Object.keys(p.projects)[0];const out=p.projects[proj].architect.build.options.outputPath;console.log('DIST='+out)" >> $GITHUB_OUTPUT
+          DIST=$(node -e "const p=require('./angular.json');const proj=p.defaultProject||Object.keys(p.projects)[0];process.stdout.write(p.projects[proj].architect.build.options.outputPath)")
+          echo "DIST=$DIST" >> $GITHUB_OUTPUT
+          echo "Dist detected: $DIST"
 
-      - name: Add SSH host key
+      # --- FIX SSH PREP (sin ssh-keyscan) ---
+      - name: Validate secrets present
+        run: |
+          test -n "${{ secrets.SSH_HOST }}" || (echo "SSH_HOST is empty" && exit 1)
+          test -n "${{ secrets.SSH_USER }}" || (echo "SSH_USER is empty" && exit 1)
+          test -n "${{ secrets.SSH_PORT }}" || (echo "SSH_PORT is empty" && exit 1)
+          test -n "${{ secrets.SSH_PRIVATE_KEY }}" || (echo "SSH_PRIVATE_KEY is empty" && exit 1)
+
+      - name: Prepare SSH key
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
 
-      - name: Deploy via rsync over SSH (sync + delete)
+      - name: Deploy via rsync over SSH
         env:
           DIST: ${{ steps.dist.outputs.DIST }}
         run: |
-          eval "$(ssh-agent -s)"
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
-          rsync -az --delete -e "ssh -p ${{ secrets.SSH_PORT }}" \
+          RSYNC_RSH="ssh -i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+          rsync -az --delete -e "$RSYNC_RSH" \
             "$DIST"/ \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/"
