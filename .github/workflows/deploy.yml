@@ -1,17 +1,20 @@
-name: Deploy Angular to cPanel (sebastianpopp/ftp-action)
+name: Deploy Angular to cPanel
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
@@ -19,32 +22,35 @@ jobs:
       - name: Install deps
         run: npm ci
 
-      - name: Build (production)
+      - name: Build Angular (production)
         run: npm run build -- --configuration=production
 
-      # ✅ Sin comillas raras ni $() — Node escribe a GITHUB_OUTPUT
-      - name: Detect dist path
-        id: paths
-        shell: bash
+      - name: Detect dist folder from angular.json
+        id: dist
         run: |
-          node <<'NODE'
-          const fs = require('fs');
-          const p = require('./angular.json');
-          const proj = p.defaultProject || Object.keys(p.projects)[0];
-          const dist = p.projects[proj].architect.build.options.outputPath;
-          const local = fs.existsSync(`${dist}/browser`) ? `${dist}/browser` : dist;
-          fs.appendFileSync(process.env.GITHUB_OUTPUT, `LOCAL=${local}\n`);
-          console.log('Using local dir:', local);
-          NODE
+          DIST=$(node -e "const p=require('./angular.json');const proj=p.defaultProject||Object.keys(p.projects)[0];process.stdout.write(p.projects[proj].architect.build.options.outputPath)")
+          echo "DIST=$DIST" >> $GITHUB_OUTPUT
+          echo "Dist detected: $DIST"
 
-      - name: Upload via FTP
-        uses: sebastianpopp/ftp-action@releases/v2
-        with:
-          host:       ${{ secrets.FTP_SERVER }}
-          user:       ${{ secrets.FTP_USERNAME }}
-          password:   ${{ secrets.FTP_PASSWORD }}
-          localDir:   ${{ steps.paths.outputs.LOCAL }}
-          remoteDir:  "public_html"
-          forceSsl:   true
-          # --delete para sincronizar (elim. obsoletos). Quita si no lo deseas.
-          options:    "--verbose"
+      # --- FIX SSH PREP (sin ssh-keyscan) ---
+      - name: Validate secrets present
+        run: |
+          test -n "${{ secrets.SSH_HOST }}" || (echo "SSH_HOST is empty" && exit 1)
+          test -n "${{ secrets.SSH_USER }}" || (echo "SSH_USER is empty" && exit 1)
+          test -n "${{ secrets.SSH_PORT }}" || (echo "SSH_PORT is empty" && exit 1)
+          test -n "${{ secrets.SSH_PRIVATE_KEY }}" || (echo "SSH_PRIVATE_KEY is empty" && exit 1)
+
+      - name: Prepare SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+
+      - name: Deploy via rsync over SSH
+        env:
+          DIST: ${{ steps.dist.outputs.DIST }}
+        run: |
+          RSYNC_RSH="ssh -i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+          rsync -az --delete -e "$RSYNC_RSH" \
+            "$DIST"/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/"
