@@ -1,4 +1,5 @@
-name: Deploy Angular to cPanel via FTPS
+name: Deploy Angular to cPanel (FTP Deployment)
+
 on:
   push:
     branches: [ "master" ]
@@ -7,34 +8,44 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: '20', cache: 'npm' }
-      - run: npm ci
-      - run: npm run build -- --configuration=production
 
-      - name: Detect dist
-        id: dist
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build (production)
+        run: npm run build -- --configuration=production
+
+      # Detecta dist y si existe "browser/" (Angular moderno)
+      - name: Detect dist/browser path
+        id: paths
         run: |
           DIST=$(node -e "const p=require('./angular.json');const proj=p.defaultProject||Object.keys(p.projects)[0];process.stdout.write(p.projects[proj].architect.build.options.outputPath)")
-          echo "DIST=$DIST" >> $GITHUB_OUTPUT
+          if [ -d "$DIST/browser" ]; then
+            echo "LOCAL=$DIST/browser" >> $GITHUB_OUTPUT
+          else
+            echo "LOCAL=$DIST" >> $GITHUB_OUTPUT
+          fi
+          echo "Using local dir: $(cat $GITHUB_OUTPUT | cut -d= -f2)"
 
-      - name: Deploy (Via FTP)
+      - name: Deploy via FTP (FTP Deployment action)
         uses: airvzxf/ftp-deployment-action@latest
         with:
-          server:     ${{ secrets.FTP_SERVER }}
-          user:   ${{ secrets.FTP_USERNAME }}
-          password:   ${{ secrets.FTP_PASSWORD }}
-          local_dir:  ${{ steps.dist.outputs.DIST }}
-          remote_dir: /public_html
-          max_retries: "7"
-          no_symlinks: "false"
+          server:   ${{ secrets.FTP_SERVER }}
+          user:     ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local_dir: ${{ steps.paths.outputs.LOCAL }}
+          remote_dir: "/public_html"
+          # Si tu hosting requiere FTPS:
           ftp_ssl_allow: "true"
-          ftp_use_feat: "true"
-          ftp_nop_interval: "9"
-          net_max_retries: "0"
-          net_persist_retries: "11"
-          net_timeout: "13s"
-          dns_max_retries: "17"
-          dns_fatal_timeout: "never"
+          # Evita borrar en cada deploy (cámbialo a "true" solo para el 1er publish si quieres limpiar):
+          delete: "false"
+          # Ajustes útiles de lftp para timeouts / pasivo:
+          lftp_settings: "set ftp:passive-mode true; set net:timeout 25; set net:max-retries 2; set net:persist-retries 2"
