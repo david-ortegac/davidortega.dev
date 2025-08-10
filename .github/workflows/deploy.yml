@@ -1,0 +1,47 @@
+name: Deploy Angular to cPanel
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build Angular (production)
+        run: npm run build -- --configuration=production
+
+      # Detecta la carpeta de salida automáticamente desde angular.json
+      - name: Detect dist folder
+        id: dist
+        run: |
+          node -e "const p=require('./angular.json');const proj=p.defaultProject||Object.keys(p.projects)[0];const out=p.projects[proj].architect.build.options.outputPath;console.log('DIST='+out)" >> $GITHUB_OUTPUT
+
+      - name: Add SSH host key
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p "${{ secrets.SSH_PORT }}" "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy via rsync over SSH (sync + delete)
+        env:
+          DIST: ${{ steps.dist.outputs.DIST }}
+        run: |
+          eval "$(ssh-agent -s)"
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
+          rsync -az --delete -e "ssh -p ${{ secrets.SSH_PORT }}" \
+            "$DIST"/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/"
