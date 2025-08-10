@@ -26,8 +26,8 @@ jobs:
           server:     ${{ secrets.FTP_SERVER }}
           user:   ${{ secrets.FTP_USERNAME }}
           password:   ${{ secrets.FTP_PASSWORD }}
-          local_dir:  ${{ steps.dist.outputs.DIST }}/
-          remote_dir: /public_html/
+          local_dir:  ${{ steps.dist.outputs.DIST }}
+          remote_dir: /public_html
           max_retries: "7"
           no_symlinks: "false"
           ftp_ssl_allow: "true"
