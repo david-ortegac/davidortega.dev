@@ -20,13 +20,21 @@ jobs:
           DIST=$(node -e "const p=require('./angular.json');const proj=p.defaultProject||Object.keys(p.projects)[0];process.stdout.write(p.projects[proj].architect.build.options.outputPath)")
           echo "DIST=$DIST" >> $GITHUB_OUTPUT
 
-      - name: Deploy (FTPS)
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Deploy (Via FTP)
+        uses: airvzxf/ftp-deployment-action@latest
         with:
           server:     ${{ secrets.FTP_SERVER }}
-          username:   ${{ secrets.FTP_USERNAME }}
+          user:   ${{ secrets.FTP_USERNAME }}
           password:   ${{ secrets.FTP_PASSWORD }}
-          port:       ${{ secrets.FTP_PORT }}
-          protocol:   ftps
-          local-dir:  ${{ steps.dist.outputs.DIST }}/
-          server-dir: public_html/
+          local_dir:  ${{ steps.dist.outputs.DIST }}/
+          remote_dir: /public_html/
+          max_retries: "7"
+          no_symlinks: "false"
+          ftp_ssl_allow: "true"
+          ftp_use_feat: "true"
+          ftp_nop_interval: "9"
+          net_max_retries: "0"
+          net_persist_retries: "11"
+          net_timeout: "13s"
+          dns_max_retries: "17"
+          dns_fatal_timeout: "never"
