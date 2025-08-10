@@ -22,17 +22,20 @@ jobs:
       - name: Build (production)
         run: npm run build -- --configuration=production
 
-      # Detecta la carpeta de salida (browser si existe)
+      # ✅ Sin comillas raras ni $() — Node escribe a GITHUB_OUTPUT
       - name: Detect dist path
         id: paths
+        shell: bash
         run: |
-          DIST=$(node -e "const p=require('./angular.json');const proj=p.defaultProject||Object.keys(p.projects)[0];process.stdout.write(p.projects[proj].architect.build.options.outputPath))"
-          if [ -d "$DIST/browser" ]; then
-            echo "LOCAL=$DIST/browser" >> $GITHUB_OUTPUT
-          else
-            echo "LOCAL=$DIST" >> $GITHUB_OUTPUT
-          fi
-          echo "Usando carpeta: $(cat $GITHUB_OUTPUT | cut -d= -f2)"
+          node <<'NODE'
+          const fs = require('fs');
+          const p = require('./angular.json');
+          const proj = p.defaultProject || Object.keys(p.projects)[0];
+          const dist = p.projects[proj].architect.build.options.outputPath;
+          const local = fs.existsSync(`${dist}/browser`) ? `${dist}/browser` : dist;
+          fs.appendFileSync(process.env.GITHUB_OUTPUT, `LOCAL=${local}\n`);
+          console.log('Using local dir:', local);
+          NODE
 
       - name: Upload via FTP
         uses: sebastianpopp/ftp-action@releases/v2
@@ -43,6 +46,5 @@ jobs:
           localDir:   ${{ steps.paths.outputs.LOCAL }}
           remoteDir:  "public_html"
           forceSsl:   true
-          # --delete elimina archivos obsoletos para espejar public_html con tu dist
-          # (si no quieres borrar nada, quita --delete)
+          # --delete para sincronizar (elim. obsoletos). Quita si no lo deseas.
           options:    "--verbose"
