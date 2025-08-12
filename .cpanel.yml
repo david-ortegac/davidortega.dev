@@ -1,19 +1,33 @@
 ---
 deployment:
   tasks:
-    # Ajusta TU usuario y la carpeta fuente a publicar
-    - export CPANEL_USER="davidort"
-    - export SOURCE_DIR="dist/davidortega.dev/browser"   # <-- cambia aquí la carpeta a desplegar
-    - export DEST="/home/${CPANEL_USER}/public_html"
+    # Salir ante cualquier error y mostrar info básica
+    - set -euo pipefail
+    - echo "Branch: $(git rev-parse --abbrev-ref HEAD || echo HEAD)"
+    # ✅ Solo ejecutar si la rama es master
+    - BRANCH="$(git rev-parse --abbrev-ref HEAD || echo HEAD)"
+    - if [ "$BRANCH" != "master" ]; then echo "Skip deploy: $BRANCH != master"; exit 0; fi
 
-    # Sincronizar: mueve todo de source_dir a dest y elimina obsoletos
-    - /bin/rsync -av --delete \
-        --exclude=".git*" \
-        --exclude="node_modules" \
-        --exclude=".env*" \
-        --chmod=D755,F644 \
-        "$SOURCE_DIR"/ "$DEST"/
+    # 📁 Ajusta aquí la carpeta que quieres publicar
+    #   Ejemplos Angular:
+    #     - dist/miapp/browser  (Angular 17+)
+    #     - dist/miapp          (Angular <=16)
+    - export SOURCE_DIR="/home/davidort/repositories/davidortega.dev/dist/davidortega.dev/browser"
 
-    # (Opcional) Permisos finales
+    # Destino estándar de cPanel (no hardcodea el usuario)
+    - export DEST="/home/davidort/public_html"
+    - /bin/mkdir -p "$DEST"
+
+    # 🚀 Sincroniza contenido (borra obsoletos si hay rsync; si no, copia completa)
+    - if command -v rsync >/dev/null 2>&1; then
+        /bin/rsync -a --delete "$SOURCE_DIR"/ "$DEST"/;
+      else
+        /bin/rm -rf "$DEST"/*;
+        /bin/cp -a "$SOURCE_DIR"/. "$DEST"/;
+      fi
+
+    # 🔐 Permisos seguros (opcional)
     - /bin/find "$DEST" -type d -exec chmod 755 {} \;
     - /bin/find "$DEST" -type f -exec chmod 644 {} \;
+
+    - echo "✅ Deploy OK"
