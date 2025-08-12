@@ -12,7 +12,7 @@ deployment:
     #   Ejemplos Angular:
     #     - dist/miapp/browser  (Angular 17+)
     #     - dist/miapp          (Angular <=16)
-    - export SOURCE_DIR="/home/davidort/repositories/davidortega.dev/dist/davidortega.dev/browser"
+    - export SOURCE_DIR="/home/davidort/repositories/davidortega.dev/dist/browser"
 
     # Destino estándar de cPanel (no hardcodea el usuario)
     - export DEST="/home/davidort/public_html"
