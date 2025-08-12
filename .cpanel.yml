@@ -1,33 +1,38 @@
 ---
 deployment:
   tasks:
-    # Salir ante cualquier error y mostrar info básica
     - set -euo pipefail
-    - echo "Branch: $(git rev-parse --abbrev-ref HEAD || echo HEAD)"
-    # ✅ Solo ejecutar si la rama es master
+
+    - export REPO="/home/davidort/repositories/davidortega.dev"
+    - export DEST="/home/davidort/public_html"
+
+    # Solo master
+    - cd "$REPO"
     - BRANCH="$(git rev-parse --abbrev-ref HEAD || echo HEAD)"
     - if [ "$BRANCH" != "master" ]; then echo "Skip deploy: $BRANCH != master"; exit 0; fi
+    - echo "Deploy branch: $BRANCH  |  PWD: $(pwd)"
 
-    # 📁 Ajusta aquí la carpeta que quieres publicar
-    #   Ejemplos Angular:
-    #     - dist/miapp/browser  (Angular 17+)
-    #     - dist/miapp          (Angular <=16)
-    - export SOURCE_DIR="/home/davidort/repositories/davidortega.dev/dist/browser"
+    # Instala deps y build prod
+    - npm i --no-audit --no-fund
+    - npx ng build --configuration=production
 
-    # Destino estándar de cPanel (no hardcodea el usuario)
-    - export DEST="/home/davidort/public_html"
+    # Detecta carpeta de salida (dist/<app>/browser si existe)
+    - node -e 'const fs=require("fs");const p=require("./angular.json");const proj=p.defaultProject||Object.keys(p.projects)[0];const out=p.projects[proj].architect.build.options.outputPath;const dir=fs.existsSync(`${out}/browser`)?`${out}/browser`:out;process.stdout.write(dir);' > .deploy_dist
+    - export SOURCE_DIR="$(cat .deploy_dist)"
+    - echo "SOURCE_DIR=$SOURCE_DIR"
+
+    # Sincroniza preservando ads.txt, .htaccess y .well-known/
     - /bin/mkdir -p "$DEST"
+    - /bin/rsync -a --delete \
+        --exclude="ads.txt" \
+        --exclude=".htaccess" \
+        --exclude=".well-known/**" \
+        --exclude=".git*" \
+        --chmod=D755,F644 \
+        "$SOURCE_DIR"/ "$DEST"/
 
-    # 🚀 Sincroniza contenido (borra obsoletos si hay rsync; si no, copia completa)
-    - if command -v rsync >/dev/null 2>&1; then
-        /bin/rsync -a --delete "$SOURCE_DIR"/ "$DEST"/;
-      else
-        /bin/rm -rf "$DEST"/*;
-        /bin/cp -a "$SOURCE_DIR"/. "$DEST"/;
-      fi
-
-    # 🔐 Permisos seguros (opcional)
+    # Permisos (opcional)
     - /bin/find "$DEST" -type d -exec chmod 755 {} \;
     - /bin/find "$DEST" -type f -exec chmod 644 {} \;
 
-    - echo "✅ Deploy OK"
+    - echo "✅ Deploy OK → $DEST (preservando ads.txt, .htaccess y .well-known/)"
