@@ -12,10 +12,10 @@ jobs:
       - name: Trigger cPanel deploy
         uses: pinkasey/cpanel-deploy-action@v1.2.1
         with:
-          hostname: 'https://davidortega.dev'
-          cpanel_username: 'davidort'
+          hostname: https://davidortega.dev
+          cpanel_username: davidort
           cpanel_token: '${{ secrets.CPANEL_TOKEN }}'
-          repository_root: '${{ secrets.CPANEL_REPO_ROOT }}'
+          repository_root: '/home/davidort/repositories/davidortega.dev'
           cPanelApiPort: 2083
           updateRepository: true
           branch: master
