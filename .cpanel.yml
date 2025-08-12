@@ -1,0 +1,20 @@
+---
+deployment:
+  tasks:
+    # Ajusta TU usuario y la carpeta fuente a publicar
+    - export CPANEL_USER="davidort"
+    - export SOURCE_DIR="dist/davidortega.dev/browser"   # <-- cambia aquí la carpeta a desplegar
+    - export DEST="/home/${CPANEL_USER}/public_html"
+
+    # Crear destino si no existe
+    - /bin/mkdir -p "$DEST"
+
+    # Sincronizar: sube cambios y elimina obsoletos
+    - /bin/rsync -a --delete \
+        --exclude=".git*" \
+        --chmod=D755,F644 \
+        "$SOURCE_DIR"/ "$DEST"/
+
+    # (Opcional) Permisos finales
+    - /bin/find "$DEST" -type d -exec chmod 755 {} \;
+    - /bin/find "$DEST" -type f -exec chmod 644 {} \;

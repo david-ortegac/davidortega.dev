@@ -1,56 +1,21 @@
-name: Deploy Angular to cPanel
+name: Deploy to cPanel (API)
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use Node.js
-        uses: actions/setup-node@v4
+      - name: Trigger cPanel deploy
+        uses: pinkasey/cpanel-deploy-action@v1.2.1
         with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install deps
-        run: npm ci
-
-      - name: Build Angular (production)
-        run: npm run build -- --configuration=production
-
-      - name: Detect dist folder from angular.json
-        id: dist
-        run: |
-          DIST=$(node -e "const p=require('./angular.json');const proj=p.defaultProject||Object.keys(p.projects)[0];process.stdout.write(p.projects[proj].architect.build.options.outputPath)")
-          echo "DIST=$DIST" >> $GITHUB_OUTPUT
-          echo "Dist detected: $DIST"
-
-      # --- FIX SSH PREP (sin ssh-keyscan) ---
-      - name: Validate secrets present
-        run: |
-          test -n "${{ secrets.SSH_HOST }}" || (echo "SSH_HOST is empty" && exit 1)
-          test -n "${{ secrets.SSH_USER }}" || (echo "SSH_USER is empty" && exit 1)
-          test -n "${{ secrets.SSH_PORT }}" || (echo "SSH_PORT is empty" && exit 1)
-          test -n "${{ secrets.SSH_PRIVATE_KEY }}" || (echo "SSH_PRIVATE_KEY is empty" && exit 1)
-
-      - name: Prepare SSH key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' > ~/.ssh/id_deploy
-          chmod 600 ~/.ssh/id_deploy
-
-      - name: Deploy via rsync over SSH
-        env:
-          DIST: ${{ steps.dist.outputs.DIST }}
-        run: |
-          RSYNC_RSH="ssh -i ~/.ssh/id_deploy -p ${{ secrets.SSH_PORT }} -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
-          rsync -az --delete -e "$RSYNC_RSH" \
-            "$DIST"/ \
-            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/${{ secrets.SSH_USER }}/public_html/"
+          hostname:        ${{ secrets.CPANEL_HOSTNAME }} 
+          cPanelApiPort:   2083                                # default
+          cpanel_username: ${{ secrets.CPANEL_USERNAME }}      # usuario cPanel del token
+          cpanel_token:    ${{ secrets.CPANEL_TOKEN }}         # token API (cPanel → Security → API Tokens)
+          repository_root: ${{ secrets.CPANEL_REPO_ROOT }}     # ej. /home/USUARIO/repositories/mi_repo
+          updateRepository: true
+          branch:          master
