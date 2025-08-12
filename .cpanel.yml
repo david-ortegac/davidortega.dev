@@ -6,12 +6,11 @@ deployment:
     - export SOURCE_DIR="dist/davidortega.dev/browser"   # <-- cambia aquí la carpeta a desplegar
     - export DEST="/home/${CPANEL_USER}/public_html"
 
-    # Crear destino si no existe
-    - /bin/mkdir -p "$DEST"
-
-    # Sincronizar: sube cambios y elimina obsoletos
-    - /bin/rsync -a --delete \
+    # Sincronizar: mueve todo de source_dir a dest y elimina obsoletos
+    - /bin/rsync -av --delete \
         --exclude=".git*" \
+        --exclude="node_modules" \
+        --exclude=".env*" \
         --chmod=D755,F644 \
         "$SOURCE_DIR"/ "$DEST"/
 
