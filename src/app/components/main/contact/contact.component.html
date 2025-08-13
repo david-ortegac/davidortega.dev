@@ -3,8 +3,8 @@
 
         <!-- Section Title -->
         <div class="container section-title" data-aos="fade-up">
-          <h2>Contact</h2>
-          <div><span>Let's</span> <span class="description-title">Connect</span></div>
+          <h2>Contacto</h2>
+          <div><span>Hablemos de tu</span> <span class="description-title">Proyecto</span></div>
         </div><!-- End Section Title -->
   
         <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -17,8 +17,9 @@
                   <i class="bi bi-geo-alt"></i>
                 </div>
                 <div class="info-content">
-                  <h4>Our Address</h4>
-                  <p>1842 Maple Avenue, Portland, Oregon 97204</p>
+                  <h4>Ubicación</h4>
+                  <p>Ibagué, Tolima, Colombia</p>
+                  <p>Disponible para proyectos remotos</p>
                 </div>
               </div>
             </div>
@@ -29,9 +30,8 @@
                   <i class="bi bi-envelope"></i>
                 </div>
                 <div class="info-content">
-                  <h4>Email Address</h4>
-                  <p>info&#64;example.com</p>
-                  <p>contact&#64;example.com</p>
+                  <h4>Email</h4>
+                  <p>smartandcomputer&#64;gmail.com</p>
                 </div>
               </div>
             </div>
@@ -39,12 +39,12 @@
             <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
               <div class="contact-info-box">
                 <div class="icon-box">
-                  <i class="bi bi-headset"></i>
+                  <i class="bi bi-phone"></i>
                 </div>
                 <div class="info-content">
-                  <h4>Hours of Operation</h4>
-                  <p>Sunday-Fri: 9 AM - 6 PM</p>
-                  <p>Saturday: 9 AM - 4 PM</p>
+                  <h4>Teléfono</h4>
+                  <p>+57 3003887576</p>
+                  <p>WhatsApp disponible</p>
                 </div>
               </div>
             </div>
@@ -54,7 +54,7 @@
 
         <!-- Google Maps (Full Width) -->
         <div class="map-section" data-aos="fade-up" data-aos-delay="200">
-          <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d48389.78314118045!2d-74.006138!3d40.710059!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a22a3bda30d%3A0xb89d1fe6bc499443!2sDowntown%20Conference%20Center!5e0!3m2!1sen!2sus!4v1676961268712!5m2!1sen!2sus" width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+          <iframe src="https://maps.google.com/maps?q=cra+14a+%2329+41+ibague&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
 
         <!-- Contact Form Section (Overlapping) -->
@@ -62,7 +62,7 @@
           <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="300">
             <div class="col-lg-10">
               <div class="contact-form-wrapper">
-                <h2 class="text-center mb-4">Get in Touch</h2>
+                <h2 class="text-center mb-4">Solicita tu Cotización</h2>
 
                 <form action="forms/contact.php" method="post" class="php-email-form">
                   <div class="row g-3">
@@ -70,7 +70,7 @@
                       <div class="form-group">
                         <div class="input-with-icon">
                           <i class="bi bi-person"></i>
-                          <input type="text" class="form-control" name="name" placeholder="First Name" required="">
+                          <input type="text" class="form-control" name="name" placeholder="Nombre Completo" required="">
                         </div>
                       </div>
                     </div>
@@ -79,7 +79,31 @@
                       <div class="form-group">
                         <div class="input-with-icon">
                           <i class="bi bi-envelope"></i>
-                          <input type="email" class="form-control" name="email" placeholder="Email Address" required="">
+                          <input type="email" class="form-control" name="email" placeholder="Correo Electrónico" required="">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <div class="input-with-icon">
+                          <i class="bi bi-phone"></i>
+                          <input type="tel" class="form-control" name="phone" placeholder="Teléfono (Opcional)">
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <div class="input-with-icon">
+                          <i class="bi bi-briefcase"></i>
+                          <select class="form-control" name="service" required="">
+                            <option value="">Selecciona un Servicio</option>
+                            <option value="asesoria">Asesoría Técnica</option>
+                            <option value="desarrollo">Desarrollo de Software</option>
+                            <option value="mantenimiento">Mantenimiento & Soporte</option>
+                            <option value="otro">Otro</option>
+                          </select>
                         </div>
                       </div>
                     </div>
@@ -88,7 +112,7 @@
                       <div class="form-group">
                         <div class="input-with-icon">
                           <i class="bi bi-text-left"></i>
-                          <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
+                          <input type="text" class="form-control" name="subject" placeholder="Asunto del Proyecto" required="">
                         </div>
                       </div>
                     </div>
@@ -97,19 +121,19 @@
                       <div class="form-group">
                         <div class="input-with-icon">
                           <i class="bi bi-chat-dots message-icon"></i>
-                          <textarea class="form-control" name="message" placeholder="Write Message..." style="height: 180px" required=""></textarea>
+                          <textarea class="form-control" name="message" placeholder="Describe tu proyecto, requerimientos y cualquier información adicional..." style="height: 180px" required=""></textarea>
                         </div>
                       </div>
                     </div>
 
                     <div class="col-12">
-                      <div class="loading">Loading</div>
+                      <div class="loading">Enviando...</div>
                       <div class="error-message"></div>
-                      <div class="sent-message">Your message has been sent. Thank you!</div>
+                      <div class="sent-message">¡Tu mensaje ha sido enviado! Te responderé en menos de 24 horas.</div>
                     </div>
 
                     <div class="col-12 text-center">
-                      <button type="submit" class="btn btn-primary btn-submit">SEND MESSAGE</button>
+                      <button type="submit" class="btn btn-primary btn-submit">ENVIAR MENSAJE</button>
                     </div>
                   </div>
                 </form>

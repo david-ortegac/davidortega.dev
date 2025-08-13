@@ -1,3 +1,18 @@
+@use './sections/_hero.scss' as *;
+@use './sections/_about.scss' as *;
+@use './sections/_services.scss' as *;
+@use './sections/_steps.scss' as *;
+@use './sections/_call-to-action.scss' as *;
+@use './sections/_testimonials.scss' as *;
+@use './sections/_portfolio.scss' as *;
+@use './sections/_team.scss' as *;
+@use './sections/_pricing.scss' as *;
+@use './sections/_faq.scss' as *;
+@use './sections/_contact.scss' as *;
+@use './sections/_portfolio-details.scss' as *;
+@use './sections/_service-details.scss' as *;
+@use './sections/_starter-section.scss' as *;
+
 /*--------------------------------------------------------------
 # Global Sections
 --------------------------------------------------------------*/
@@ -56,18 +71,3 @@ section,
     font-family: var(--heading-font);
   }
 }
-
-@import './sections/_hero.scss';
-@import './sections/_about.scss';
-@import './sections/_services.scss';
-@import './sections/_steps.scss';
-@import './sections/_call-to-action.scss';
-@import './sections/_testimonials.scss';
-@import './sections/_portfolio.scss';
-@import './sections/_team.scss';
-@import './sections/_pricing.scss';
-@import './sections/_faq.scss';
-@import './sections/_contact.scss';
-@import './sections/_portfolio-details.scss';
-@import './sections/_service-details.scss';
-@import './sections/_starter-section.scss';
