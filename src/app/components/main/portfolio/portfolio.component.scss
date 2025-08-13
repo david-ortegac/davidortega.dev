@@ -80,3 +80,292 @@
     opacity: 1;
   }
 }
+
+
+
+// Contenedor principal de WakaTime
+.wakatime-container {
+  margin-bottom: 4rem;
+  
+  @media (max-width: 767px) {
+    margin-bottom: 3rem;
+  }
+}
+
+// Título principal del tracking
+.wakatime-main-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, 
+    color-mix(in srgb, var(--surface-color), transparent 15%), 
+    color-mix(in srgb, var(--surface-color), transparent 25%)
+  );
+  backdrop-filter: blur(20px);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 80%);
+  border-radius: 20px;
+  transition: all 0.4s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, 
+      transparent 0%, 
+      color-mix(in srgb, var(--accent-color), transparent 5%) 50%, 
+      transparent 100%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    border-color: color-mix(in srgb, var(--accent-color), transparent 30%);
+
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: 991px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+  }
+
+  @media (max-width: 767px) {
+    padding: 1.25rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.title-content {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.title-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), transparent 20%));
+  border-radius: 20px;
+  color: var(--contrast-color);
+  font-size: 2.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+
+  @media (max-width: 767px) {
+    width: 60px;
+    height: 60px;
+    font-size: 2rem;
+  }
+}
+
+.title-text {
+  flex: 1;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--default-color);
+    margin: 0 0 0.5rem 0;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+
+    @media (max-width: 1200px) {
+      font-size: 2rem;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 1.75rem;
+    }
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: color-mix(in srgb, var(--default-color), transparent 25%);
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.5;
+
+    @media (max-width: 767px) {
+      font-size: 1rem;
+    }
+  }
+}
+
+.title-badge {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+
+  a {
+    display: block;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    img {
+      height: 40px;
+      width: auto;
+      border-radius: 8px;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
+
+      @media (max-width: 767px) {
+        height: 32px;
+      }
+    }
+  }
+}
+
+// Contenedor de gráficas
+.wakatime-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.chart-item {
+  background-color: color-mix(in srgb, var(--surface-color), transparent 20%);
+  backdrop-filter: blur(15px);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 85%);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--surface-color), transparent 30%);
+    border-color: color-mix(in srgb, var(--accent-color), transparent 40%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  }
+
+  @media (max-width: 767px) {
+    padding: 1.25rem;
+  }
+}
+
+.chart-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+}
+
+.chart-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  background: linear-gradient(135deg, var(--accent-color), color-mix(in srgb, var(--accent-color), transparent 25%));
+  border-radius: 14px;
+  color: var(--contrast-color);
+  font-size: 1.6rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+
+  @media (max-width: 767px) {
+    width: 44px;
+    height: 44px;
+    font-size: 1.3rem;
+  }
+}
+
+.chart-title {
+  flex: 1;
+
+  h4 {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--default-color);
+    margin: 0 0 0.25rem 0;
+    letter-spacing: 0.3px;
+
+    @media (max-width: 767px) {
+      font-size: 1.1rem;
+    }
+  }
+
+  p {
+    font-size: 0.9rem;
+    color: color-mix(in srgb, var(--default-color), transparent 35%);
+    margin: 0;
+    font-weight: 500;
+  }
+}
+
+.chart-content {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: color-mix(in srgb, var(--surface-color), transparent 10%);
+  border: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
+
+  figure {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 250px;
+
+    @media (max-width: 767px) {
+      min-height: 200px;
+    }
+  }
+
+  embed {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    border-radius: 8px;
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+}
+
