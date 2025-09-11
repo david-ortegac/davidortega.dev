@@ -37,7 +37,7 @@ jobs:
         cpanel_token: '${{ secrets.CPANEL_TOKEN }}'
         cpanel_username: 'davidort'
         repository_root: '/home/davidort/repositories/davidortega.dev'
-        branch: main
+        branch: master
 
     - name: echo deploy-duration
       run: echo "Deployment took ${{ steps.deploy.outputs.duration }} milliseconds"
