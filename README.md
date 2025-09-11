@@ -2,6 +2,33 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.15.
 
+## Configuración de Variables de Entorno
+
+Este proyecto utiliza variables de entorno para configurar la API de YouTube. Para configurar las variables:
+
+### Desarrollo Local
+
+1. Crea un archivo `.env` en la raíz del proyecto:
+```bash
+# Variables de entorno para desarrollo local
+API_KEY=tu_api_key_de_youtube_aqui
+CHANNEL_ID=tu_channel_id_de_youtube_aqui
+```
+
+2. Ejecuta el servidor de desarrollo:
+```bash
+npm start
+```
+
+### Producción (GitHub Actions)
+
+Las variables de entorno se inyectan automáticamente desde GitHub Secrets durante el build. Configura estos secrets en tu repositorio:
+
+- `API_KEY`: Tu API key de YouTube
+- `CHANNEL_ID`: El ID de tu canal de YouTube
+
+Para más detalles, consulta [.github/SECRETS_SETUP.md](.github/SECRETS_SETUP.md).
+
 ## Development server
 
 To start a local development server, run:
