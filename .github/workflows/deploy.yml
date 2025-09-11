@@ -31,12 +31,14 @@ jobs:
 
     - name: Deploy to cPanel
       id: deploy
-      uses: pinkasey/cpanel-deploy-action@v1.0.0
+      uses: paxha/cpanel-deploy@v4
       with:
-        hostname: 'https://davidortega.dev'
-        repository_root: '/home/davidort/repositories/davidortega.dev'
+        host: 'https://davidortega.dev'
+        username: 'davidort'
+        api_token: '${{ secrets.CPANEL_TOKEN }}'
+        remote_path: '/home/davidort/repositories/davidortega.dev'
         branch: main
-        cpanel_token: '${{ secrets.CPANEL_TOKEN }}'
+        deploy: true
 
     - name: echo deploy-duration
       run: echo "Deployment took ${{ steps.deploy.outputs.duration }} milliseconds"
