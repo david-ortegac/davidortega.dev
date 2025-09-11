@@ -20,12 +20,19 @@ CHANNEL_ID=tu_channel_id_de_youtube_aqui
 npm start
 ```
 
-### Producción (GitHub Actions)
+### Producción
 
+#### GitHub Actions
 Las variables de entorno se inyectan automáticamente desde GitHub Secrets durante el build. Configura estos secrets en tu repositorio:
 
 - `API_KEY`: Tu API key de YouTube
 - `CHANNEL_ID`: El ID de tu canal de YouTube
+
+#### cPanel
+Si usas cPanel para el deploy, configura las variables de entorno en tu panel de control:
+
+1. Ve a la sección "Variables de Entorno" en cPanel
+2. Agrega `API_KEY` y `CHANNEL_ID` con tus valores
 
 Para más detalles, consulta [.github/SECRETS_SETUP.md](.github/SECRETS_SETUP.md).
 

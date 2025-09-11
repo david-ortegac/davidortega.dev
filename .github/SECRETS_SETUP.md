@@ -50,3 +50,14 @@ CHANNEL_ID=tu_channel_id_aqui
 ```
 
 **Nota**: No commitees el archivo `.env` al repositorio. Asegúrate de agregarlo a tu `.gitignore`.
+
+## Deploy en cPanel
+
+Si usas cPanel para el deploy, configura las variables de entorno en tu panel de control:
+
+1. Ve a la sección "Variables de Entorno" en cPanel
+2. Agrega las siguientes variables:
+   - `API_KEY`: Tu API key de YouTube
+   - `CHANNEL_ID`: El ID de tu canal de YouTube
+
+El archivo `.cpanel.yml` ya está configurado para usar estas variables automáticamente durante el build.

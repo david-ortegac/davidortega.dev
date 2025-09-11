@@ -1,8 +1,6 @@
 ---
 deployment:
   tasks:
-    - set -euo pipefail
-
     - export REPO="/home/davidort/repositories/davidortega.dev"
     - export DEST="/home/davidort/public_html"
 
@@ -10,10 +8,12 @@ deployment:
     - cd "$REPO"
     - BRANCH="$(git rev-parse --abbrev-ref HEAD || echo HEAD)"
     - if [ "$BRANCH" != "master" ]; then echo "Skip deploy: $BRANCH != master"; exit 0; fi
-    - echo "Deploy branch: $BRANCH  |  PWD: $(pwd)"
+    - echo "Deploy branch: $BRANCH"
 
     # Instala deps y build prod
     - npm i --no-audit --no-fund
+    - export API_KEY="${API_KEY:-REPLACE_WITH_YOUTUBE_API_KEY}"
+    - export CHANNEL_ID="${CHANNEL_ID:-REPLACE_WITH_CHANNEL_ID}"
     - npx ng build --configuration=production
 
     # Detecta carpeta de salida (dist/<app>/browser si existe)
