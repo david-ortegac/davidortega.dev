@@ -28,10 +28,15 @@ jobs:
       env:
         API_KEY: ${{ secrets.API_KEY }}
         CHANNEL_ID: ${{ secrets.CHANNEL_ID }}
-        
-    - name: Deploy to GitHub Pages
-      uses: angular-cli-ghpages@v2.0.3
+
+    - name: Deploy to cPanel
+      id: deploy
+      uses: pinkasey/cpanel-deploy-action@v1.0.0
       with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        dist_folder: dist/browser
-      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+        hostname: 'https://davidortega.dev'
+        repository_root: '/home/davidort/repositories/davidortega.dev'
+        branch: main
+        cpanel_token: '${{ secrets.CPANEL_TOKEN }}'
+
+    - name: echo deploy-duration
+      run: echo "Deployment took ${{ steps.deploy.outputs.duration }} milliseconds"
