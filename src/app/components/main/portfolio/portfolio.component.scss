@@ -358,7 +358,7 @@
   embed {
     width: 100%;
     height: auto;
-    max-width: 100%;
+    max-width: 60%;
     border-radius: 8px;
     filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
     transition: transform 0.3s ease;
@@ -367,5 +367,12 @@
       transform: scale(1.02);
     }
   }
+}
+
+// Tamaño reducido para la gráfica sin perder calidad
+.wakatime-embed-sm {
+  max-width: 520px; // ajusta el límite deseado
+  width: 100%;
+  height: auto; // preserva proporción del SVG incrustado
 }
 
