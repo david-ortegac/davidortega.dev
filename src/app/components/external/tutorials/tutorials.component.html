@@ -1,0 +1,32 @@
+<main class="tutorials section">
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Tutoriales</h2>
+    <div><span>Videos</span> <span class="description-title">YouTube</span></div>
+  </div>
+
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
+    @if (isLoading()) {
+      <div>Cargando…</div>
+    } @else if (!hasError()) {
+      <div class="tutorials-grid">
+        @for (v of videos(); track v.id) {
+          <article class="tutorial-card">
+            <figure class="thumbnail">
+              <a href="#" [attr.href]="'https://www.youtube.com/watch?v=' + v.id" target="_blank" rel="noopener noreferrer" [attr.aria-label]="v.title" [title]="v.title">
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Video" [src]="v.thumbnailUrl" [alt]="v.title" loading="lazy">
+              </a>
+            </figure>
+            <div class="content">
+              <h3 class="title">
+                <a href="#" [attr.href]="'https://www.youtube.com/watch?v=' + v.id" target="_blank" rel="noopener noreferrer" [attr.aria-label]="v.title" [title]="v.title">{{ v.title }}</a>
+              </h3>
+              <div class="meta">{{ v.publishedAt | date:'mediumDate' }}</div>
+            </div>
+          </article>
+        }
+      </div>
+    } @else {
+      <p>No fue posible cargar los videos. Intenta más tarde.</p>
+    }
+  </div>
+</main>
