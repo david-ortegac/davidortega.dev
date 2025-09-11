@@ -31,7 +31,7 @@ jobs:
 
     - name: Deploy to cPanel
       id: deploy
-      uses: paxha/cpanel-deploy
+      uses: paxha/cpanel-deploy@3.4
       with:
         host: 'https://davidortega.dev'
         port: '2083'
