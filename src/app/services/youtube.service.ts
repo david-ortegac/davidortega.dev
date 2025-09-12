@@ -1,65 +1,20 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, map, switchMap } from 'rxjs';
-import { environment } from '../../environments/environment';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable, switchMap } from 'rxjs';
 
-export interface YoutubeSearchItemSnippet {
-  publishedAt: string;
-  title: string;
-  description: string;
-  thumbnails: {
-    default?: { url: string; width?: number; height?: number };
-    medium?: { url: string; width?: number; height?: number };
-    high?: { url: string; width?: number; height?: number };
-    standard?: { url: string; width?: number; height?: number };
-    maxres?: { url: string; width?: number; height?: number };
-  };
-  channelTitle: string;
-}
-
-export interface YoutubeSearchItemId {
-  videoId?: string;
-}
-
-export interface YoutubeSearchItem {
-  id: YoutubeSearchItemId;
-  snippet: YoutubeSearchItemSnippet;
-}
-
-export interface YoutubeSearchResponse {
-  items: YoutubeSearchItem[];
-  nextPageToken?: string;
-}
-
-export interface YoutubeVideoSnippet extends YoutubeSearchItemSnippet {}
-
-export interface YoutubeVideoItem {
-  id: string;
-  snippet: YoutubeVideoSnippet;
-}
-
-export interface YoutubeVideosResponse {
-  items: YoutubeVideoItem[];
-}
-
-export interface ChannelVideo {
-  id: string;
-  title: string;
-  description: string;
-  publishedAt: string;
-  thumbnailUrl: string;
-}
+import { ChannelVideo, YoutubeSearchItem, YoutubeSearchResponse, YoutubeVideosResponse } from '../models/YoutubeSearchItemSnippet';
+import { BackService } from './back.service';
 
 @Injectable({ providedIn: 'root' })
 export class YoutubeService {
   private readonly http: HttpClient = inject(HttpClient);
-  private readonly apiKey: string = environment.youtube.apiKey;
-  private readonly channelId: string = environment.youtube.channelId;
-  private readonly maxResults: number = environment.youtube.maxResults ?? 12;
+  private readonly channelId: string = 'UClQ8npg3voyOWGWEO543GqA';
+  private readonly maxResults: number = 12;
 
-  fetchChannelVideosOldestFirst(): Observable<readonly ChannelVideo[]> {
+
+  fetchChannelVideosOldestFirst(apiKey: string): Observable<readonly ChannelVideo[]> {
     const searchParams: HttpParams = new HttpParams()
-      .set('key', this.apiKey)
+      .set('key', apiKey)
       .set('channelId', this.channelId)
       .set('part', 'snippet')
       .set('type', 'video')
@@ -74,7 +29,7 @@ export class YoutubeService {
         switchMap((items: YoutubeSearchItem[]) => {
           const videoIds: string = items.map((i) => i.id.videoId as string).join(',');
           const videosParams: HttpParams = new HttpParams()
-            .set('key', this.apiKey)
+            .set('key', apiKey)
             .set('id', videoIds)
             .set('part', 'snippet');
           return this.http.get<YoutubeVideosResponse>('https://www.googleapis.com/youtube/v3/videos', { params: videosParams });

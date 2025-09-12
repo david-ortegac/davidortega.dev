@@ -9,17 +9,22 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="#hero" class="active">Inicio</a></li>
-          <li><a href="#about">Sobre mí</a></li>
-          <li><a href="#services">Servicios</a></li>
-          <li><a href="#steps">Metodología</a></li>
-          <li><a href="#portfolio">Portafolio</a></li>
-          <li><a href="#pricing">Precios</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="#contact">Contacto</a></li>
-          <li><a routerLink="/tutorials">Tutoriales</a></li>
+          <li><a href="#hero" class="active" (click)="onNavLinkClick()">Inicio</a></li>
+          <li><a href="#about" (click)="onNavLinkClick()">Sobre mí</a></li>
+          <li><a href="#services" (click)="onNavLinkClick()">Servicios</a></li>
+          <li><a href="#steps" (click)="onNavLinkClick()">Metodología</a></li>
+          <li><a href="#portfolio" (click)="onNavLinkClick()">Portafolio</a></li>
+          <li><a href="#pricing" (click)="onNavLinkClick()">Precios</a></li>
+          <li><a href="#faq" (click)="onNavLinkClick()">FAQ</a></li>
+          <li><a href="#contact" (click)="onNavLinkClick()">Contacto</a></li>
+          <li><a routerLink="/tutorials" (click)="onNavLinkClick()">Tutoriales</a></li>
         </ul>
-        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        <i 
+          class="mobile-nav-toggle d-xl-none bi" 
+          [class.bi-list]="!isMobileMenuOpen()"
+          [class.bi-x]="isMobileMenuOpen()"
+          (click)="toggleMobileMenu()">
+        </i>
       </nav>
     </div>
   </header>
