@@ -4,7 +4,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "serve": "node serve.js",
     "build": "ng build --configuration production && npm run obfuscate && cd dist && cd browser && zip -r ../browser.zip .",
+    "build:dev": "ng build --configuration development",
     "obfuscate": "node obfuscate.mjs",
     "build:prod:obf": "npm run build:prod ",
     "watch": "ng build --watch --configuration development",
