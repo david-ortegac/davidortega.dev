@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://davidortega.dev/sitemap.xml
+
+# Crawl-delay para ser amigable con los bots
+Crawl-delay: 1
+
+# Bloquear archivos sensibles
+Disallow: /api/
+Disallow: /*.json$
+Disallow: /admin/
+Disallow: /private/
+
+# Permitir específicamente para Google AdSense
+User-agent: Mediapartners-Google
+Allow: /
+
+# Permitir para Google Images
+User-agent: Googlebot-Image
+Allow: /img/
+Allow: /assets/

@@ -1,3 +1,56 @@
 :host {
   display: block;
 }
+
+// Estilos para las secciones de anuncios
+.ad-section {
+  padding: 30px 0;
+  background-color: #fafafa;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+  margin: 40px 0;
+  min-width: 320px; // Asegurar ancho mínimo
+  
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 320px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+  
+  // Espaciado específico para diferentes posiciones
+  &:first-of-type {
+    margin-top: 20px; // Menos espacio después del hero
+  }
+  
+  &:last-of-type {
+    margin-bottom: 20px; // Menos espacio antes del contacto
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .ad-section {
+    padding: 20px 0;
+    margin: 25px 0;
+    
+    &:first-of-type {
+      margin-top: 15px;
+    }
+    
+    &:last-of-type {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .ad-section {
+    background-color: #2a2a2a;
+    border-color: #555;
+  }
+}

@@ -1,1 +1,67 @@
 @use './../src/app/assets/styles/main.scss' as *;
+@use './styles/lazy-loading.scss' as *;
+
+// Optimizaciones adicionales para SEO y rendimiento
+html {
+  scroll-behavior: smooth;
+}
+
+// Mejoras para Core Web Vitals
+* {
+  box-sizing: border-box;
+}
+
+// Prevenir layout shift
+img, video, iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+// Optimización de fuentes para mejor CLS
+@font-face {
+  font-family: 'Roboto';
+  font-display: swap;
+  src: local('Roboto');
+}
+
+@font-face {
+  font-family: 'Raleway';
+  font-display: swap;
+  src: local('Raleway');
+}
+
+// Estilos para mejor accesibilidad (importante para AdSense)
+:focus {
+  outline: 2px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+// Skip links para accesibilidad
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #0d6efd;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+  
+  &:focus {
+    top: 6px;
+  }
+}
+
+// Mejoras para el rendimiento de animaciones
+.animate {
+  will-change: transform;
+}
+
+// Optimización para dispositivos de alto DPI
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .high-dpi-image {
+    // Usar imágenes de alta resolución cuando estén disponibles
+    background-size: contain;
+  }
+}

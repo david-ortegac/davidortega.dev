@@ -1,0 +1,12 @@
+# ads.txt file for davidortega.dev
+# Este archivo es requerido por Google AdSense para verificar la propiedad del sitio
+
+google.com, pub-6156141818582841, DIRECT, f08c47fec0942fa0
+
+# Explicación de los campos:
+# google.com - Dominio del proveedor de anuncios
+# pub-6156141818582841 - Tu ID de editor de AdSense
+# DIRECT - Relación directa con el proveedor
+# f08c47fec0942fa0 - ID de certificación de Google
+
+# Nota: Reemplaza pub-6156141818582841 con tu ID real de AdSense si es diferente
