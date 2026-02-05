@@ -100,7 +100,7 @@
                 *ngFor="let project of filteredProjects; trackBy: trackByProjectId">
                 <article class="portfolio-entry">
                   <figure class="entry-image">
-                    <img [src]="project.image" class="img-fluid" [alt]="project.title" loading="lazy">
+                    <img [ngSrc]="project.image" width="400" height="300" class="img-fluid" [alt]="project.title">
                     <div class="entry-overlay">
                       <div class="overlay-content">
                         <div class="entry-meta">{{ project.meta }}</div>

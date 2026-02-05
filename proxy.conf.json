@@ -1,0 +1,11 @@
+{
+  "/api": {
+    "target": "https://ghasecrets.davidortega.dev",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/api": "/api"
+    }
+  }
+}

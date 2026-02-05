@@ -13,7 +13,7 @@
           <article class="tutorial-card">
             <figure class="thumbnail">
               <a href="#" [attr.href]="'https://www.youtube.com/watch?v=' + v.id" target="_blank" rel="noopener noreferrer" [attr.aria-label]="v.title" [title]="v.title">
-                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Video" [src]="v.thumbnailUrl" [alt]="v.title" loading="lazy">
+                <img [ngSrc]="v.thumbnailUrl" width="480" height="360" [alt]="v.title">
               </a>
             </figure>
             <div class="content">
