@@ -57,7 +57,7 @@ export class AppComponent implements OnInit {
           scrollTracked['75'] = true;
         }
       }
-    });
+    }, { passive: true });
   }
 
   private setupTimeTracking(): void {

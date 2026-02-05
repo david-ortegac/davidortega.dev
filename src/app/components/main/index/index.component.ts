@@ -145,17 +145,27 @@ export class IndexComponent implements OnInit {
       "author": {
         "@type": "Person",
         "name": "David Ortega"
-      },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://davidortega.dev/search?q={search_term_string}",
-        "query-input": "required name=search_term_string"
       }
+    };
+
+    // Datos estructurados para Breadcrumbs
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Inicio",
+          "item": "https://davidortega.dev"
+        }
+      ]
     };
 
     // Agregar los esquemas
     this.seoService.addStructuredData(personSchema);
     this.seoService.addStructuredData(serviceSchema);
     this.seoService.addStructuredData(websiteSchema);
+    this.seoService.addStructuredData(breadcrumbSchema);
   }
 }
