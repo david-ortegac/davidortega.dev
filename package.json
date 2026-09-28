@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build --configuration production && npm run obfuscate",
+    "clean:install": "rm -rf node_modules dist package-lock.json && npm install",
+    "build": "npm run clean:install && ng build --configuration production && npm run obfuscate",
     "build:dev": "ng build --configuration development",
     "build:prod": "ng build --configuration production",
     "build:prod:obf": "npm run build:prod && npm run obfuscate",
