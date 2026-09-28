@@ -3,6 +3,7 @@ import {
   NotFoundError,
   UnauthorizedError,
 } from '../../../../domain/errors/app.errors';
+import { ValidationError } from '../../../../domain/errors/validation.error';
 import { AppDependencies } from '../../../config/dependencies';
 
 export interface LambdaHttpEvent {
@@ -21,6 +22,8 @@ export interface LambdaHttpEvent {
   };
   headers?: Record<string, string | undefined>;
   queryStringParameters?: Record<string, string | undefined>;
+  body?: string | null;
+  isBase64Encoded?: boolean;
 }
 
 export interface LambdaHttpResponse {
@@ -55,10 +58,6 @@ export class LambdaAdapter {
       };
     }
 
-    if (method !== 'GET') {
-      return this.formatResponse(405, { error: 'Method Not Allowed' });
-    }
-
     // Normalizar ruta: si API Gateway usa /{proxy+}, extraer el parámetro directamente
     let raw = '';
     if (event.pathParameters?.proxy) {
@@ -83,7 +82,13 @@ export class LambdaAdapter {
     console.log(`[LambdaAdapter] Inbound request: ${method} ${cleanPath} (raw: ${event.rawPath || event.path})`);
 
     try {
-      // 1. Endpoint principal: Obtener tutoriales
+      // ── GET Routes ───────────────────────────────────────────────
+
+      if (method !== 'GET') {
+        return this.formatResponse(405, { error: 'Method Not Allowed' });
+      }
+
+      // 2. Endpoint principal: Obtener tutoriales
       if (cleanPath === '/api/v1/tutorials' || cleanPath === '/tutorials' || cleanPath === '/') {
         const limit = Number(event.queryStringParameters?.limit || 12);
         const order = (event.queryStringParameters?.order as 'oldest' | 'newest') || 'newest';
@@ -94,21 +99,21 @@ export class LambdaAdapter {
         });
       }
 
-      // 2. Endpoint de secreto: api_key
+      // 3. Endpoint de secreto: api_key
       if (cleanPath === '/api/v1/secrets/api_key') {
         const token = this.extractAuthToken(event.headers);
         const secret = await this.deps.getSecretUseCase.execute('api_key', token);
         return this.formatResponse(200, secret);
       }
 
-      // 3. Endpoint de secreto: channel_id
+      // 4. Endpoint de secreto: channel_id
       if (cleanPath === '/api/v1/secrets/channel_id') {
         const token = this.extractAuthToken(event.headers);
         const secret = await this.deps.getSecretUseCase.execute('channel_id', token);
         return this.formatResponse(200, secret);
       }
 
-      // 4. Healthcheck
+      // 5. Healthcheck
       if (cleanPath === '/health') {
         return this.formatResponse(200, {
           status: 'ok',
@@ -123,6 +128,7 @@ export class LambdaAdapter {
     }
   }
 
+
   private extractAuthToken(headers?: Record<string, string | undefined>): string | undefined {
     if (!headers) return undefined;
     return headers['authorization'] || headers['Authorization'] || headers['AUTHORIZATION'];
@@ -130,6 +136,10 @@ export class LambdaAdapter {
 
   private handleError(error: any): LambdaHttpResponse {
     console.error('[LambdaAdapter] Error caught:', error);
+
+    if (error instanceof ValidationError) {
+      return this.formatResponse(422, { error: error.message });
+    }
 
     if (error instanceof UnauthorizedError) {
       return this.formatResponse(401, { error: error.message });

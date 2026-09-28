@@ -1,13 +1,11 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-whatsapp-button',
   template: `
-    <a [href]="whatsappUrl" 
+    <a href="#contact" 
        class="whatsapp-float" 
-       target="_blank" 
-       rel="noopener noreferrer" 
-       [attr.aria-label]="ariaLabel">
+       aria-label="Ir a la sección de contacto por WhatsApp">
       
       <!-- Ícono SVG de WhatsApp optimizado -->
       <svg class="whatsapp-icon" viewBox="0 0 24 24" fill="currentColor">
@@ -91,13 +89,4 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
     }
   `]
 })
-export class WhatsappButtonComponent {
-  @Input() phoneNumber: string = '573003887576';
-  @Input() message: string = 'Hola! Me interesa conocer más sobre tus servicios de desarrollo web.';
-  @Input() ariaLabel: string = 'Contactar por WhatsApp - David Ortega Desarrollador Full Stack';
-
-  get whatsappUrl(): string {
-    const encodedMessage = encodeURIComponent(this.message);
-    return `https://wa.me/${this.phoneNumber}?text=${encodedMessage}`;
-  }
-}
+export class WhatsappButtonComponent {}
