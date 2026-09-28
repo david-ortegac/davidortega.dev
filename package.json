@@ -12,7 +12,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "preview": "node preview.mjs",
-    "serve:prod": "npm run build:prod && node serve.js"
+    "serve:prod": "npm run build:prod && node serve.js",
+    "deploy:pages": "npm run build:prod && npx wrangler pages deploy dist/browser --project-name=royal-mouse-7c45"
   },
   "private": true,
   "dependencies": {
