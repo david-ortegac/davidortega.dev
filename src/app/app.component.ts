@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { FooterComponent } from './components/base/footer/footer.component';
 import { HeaderComponent } from './components/base/header/header.component';
 import { RouterOutlet } from '@angular/router';
@@ -10,6 +10,7 @@ import { isPlatformBrowser } from '@angular/common';
   selector: 'app-root',
   imports: [HeaderComponent, FooterComponent, RouterOutlet, WhatsappButtonComponent],
   templateUrl: './app.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
