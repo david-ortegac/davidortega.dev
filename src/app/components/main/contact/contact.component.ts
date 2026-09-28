@@ -15,27 +15,28 @@ export class ContactComponent {
 
   constructor(private fb: FormBuilder) {
     this.contactForm = this.fb.group({
-      name: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(2)]],
       phone: [''],
       category: ['', Validators.required],
-      service: ['', Validators.required],
-      subject: ['', Validators.required],
-      message: ['', Validators.required],
+      subject: ['', [Validators.required, Validators.minLength(3)]],
+      message: ['', [Validators.required, Validators.minLength(10)]],
     });
   }
 
   sendWhatsApp(): void {
-    if (this.contactForm.invalid) return;
+    if (this.contactForm.invalid) {
+      this.contactForm.markAllAsTouched();
+      return;
+    }
 
-    const { name, phone, category, service, subject, message } = this.contactForm.value;
+    const { name, phone, category, subject, message } = this.contactForm.value;
 
     const lines = [
-      `🔔 *Solicitud de Cotización*`,
+      `🔔 *Solicitud de Contacto / Cotización*`,
       ``,
       `👤 *Nombre:* ${name}`,
       phone ? `📱 *Teléfono:* ${phone}` : '',
-      `🏷️ *Categoría:* ${category}`,
-      `💼 *Servicio:* ${service}`,
+      `🏷️ *Servicio:* ${category}`,
       `📋 *Asunto:* ${subject}`,
       ``,
       `💬 *Mensaje:*`,

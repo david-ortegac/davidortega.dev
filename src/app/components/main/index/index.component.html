@@ -5,11 +5,24 @@
 
     @defer (on viewport) {
         <app-services></app-services>
+    } @placeholder {
+        <div class="section py-5" style="min-height: 480px; display: flex; align-items: center; justify-content: center;" aria-hidden="true">
+            <div class="spinner-border" style="width: 2rem; height: 2rem; color: var(--accent-color); opacity: 0.6;" role="status">
+                <span class="visually-hidden">Cargando servicios...</span>
+            </div>
+        </div>
+    }
+
+    @defer (on viewport) {
         <app-steps></app-steps>
         <app-cta></app-cta>
         <app-portfolio></app-portfolio>   
     } @placeholder {
-        <div class="py-5 text-center">Cargando contenido...</div>
+        <div class="section py-5" style="min-height: 600px; display: flex; align-items: center; justify-content: center;" aria-hidden="true">
+            <div class="spinner-border" style="width: 2rem; height: 2rem; color: var(--accent-color); opacity: 0.6;" role="status">
+                <span class="visually-hidden">Cargando contenido...</span>
+            </div>
+        </div>
     }
   
     @defer (on viewport; prefetch on idle) {
@@ -17,7 +30,11 @@
         <app-faq></app-faq>
         <app-contact></app-contact>
     } @placeholder {
-        <div class="py-5 text-center">...</div>
+        <div class="section py-5" style="min-height: 500px; display: flex; align-items: center; justify-content: center;" aria-hidden="true">
+            <div class="spinner-border" style="width: 2rem; height: 2rem; color: var(--accent-color); opacity: 0.6;" role="status">
+                <span class="visually-hidden">Cargando contacto...</span>
+            </div>
+        </div>
     }
 
 </main>

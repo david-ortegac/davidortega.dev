@@ -106,10 +106,17 @@
                         <div class="entry-meta">{{ project.meta }}</div>
                         <h3 class="entry-title">{{ project.title }}</h3>
                         <div class="entry-links">
-                          <a [href]="project.image" class="glightbox" [attr.data-gallery]="'portfolio-gallery-' + project.category" [attr.data-glightbox]="'title: ' + project.title + '; description: ' + project.description">
+                          <a [href]="project.image" 
+                             class="glightbox" 
+                             [attr.data-gallery]="'portfolio-gallery-' + project.category" 
+                             [attr.data-glightbox]="'title: ' + project.title + '; description: ' + project.description"
+                             [attr.aria-label]="'Ampliar imagen de ' + project.title">
                             <i class="bi bi-arrows-angle-expand"></i>
                           </a>
-                          <a [href]="project.githubUrl" target="_blank">
+                          <a [href]="project.githubUrl" 
+                             target="_blank" 
+                             rel="noopener noreferrer"
+                             [attr.aria-label]="'Ver código de ' + project.title + ' en GitHub'">
                             <i class="bi bi-github"></i>
                           </a>
                         </div>

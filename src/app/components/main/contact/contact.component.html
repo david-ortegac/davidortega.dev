@@ -50,93 +50,152 @@
             </div>
           </div>
 
-        </div>
+          <!-- Availability & Coverage Card -->
+          <div class="row justify-content-center mb-5" data-aos="fade-up" data-aos-delay="250">
+            <div class="col-lg-12">
+              <div class="availability-card">
+                <div class="availability-status">
+                  <span class="status-pulse"></span>
+                  <p class="status-text">Disponible para Nuevos Proyectos y Consultorías</p>
+                </div>
+                <div class="availability-details">
+                  <span><i class="bi bi-geo-alt"></i> Remoto Global (Base: Colombia)</span>
+                  <span><i class="bi bi-clock"></i> Zona Horaria: UTC-5 (LATAM / US EST)</span>
+                  <span><i class="bi bi-shield-check"></i> Contratos Freelance / B2B</span>
+                </div>
+              </div>
+            </div>
+          </div>
 
-        <!-- Google Maps (Full Width) -->
-        <div class="map-section" data-aos="fade-up" data-aos-delay="200">
-          <iframe src="https://maps.google.com/maps?q=cra+14a+%2329+41+ibague&t=&z=13&ie=UTF8&iwloc=&output=embed" width="100%" height="500" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-        </div>
-
-        <!-- Contact Form Section (Overlapping) -->
-        <div class="container form-container-overlap">
+          <!-- Contact Form Section -->
           <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="300">
             <div class="col-lg-10">
               <div class="contact-form-wrapper">
-                <h2 class="text-center mb-4">Solicita tu Cotización</h2>
+                <h3>Solicita tu Cotización o Asesoría</h3>
+                <p class="form-subtitle">Completa el formulario y te responderé directamente vía WhatsApp en menos de 24 horas.</p>
 
                 <form [formGroup]="contactForm" (ngSubmit)="sendWhatsApp()" class="whatsapp-contact-form">
                   <div class="row g-3">
+                    <!-- Nombre Completo -->
                     <div class="col-md-6">
                       <div class="form-group">
+                        <label for="contact-name" class="form-label">
+                          Nombre Completo <span class="required">*</span>
+                        </label>
                         <div class="input-with-icon">
                           <i class="bi bi-person"></i>
-                          <input type="text" class="form-control" formControlName="name" placeholder="Nombre Completo" required="">
+                          <input 
+                            id="contact-name"
+                            type="text" 
+                            class="form-control" 
+                            formControlName="name" 
+                            placeholder="Ej. Carlos Mendoza" 
+                            required>
                         </div>
+                        @if (contactForm.get('name')?.invalid && contactForm.get('name')?.touched) {
+                          <span class="field-error">Por favor ingresa tu nombre completo.</span>
+                        }
                       </div>
                     </div>
 
+                    <!-- Teléfono / WhatsApp -->
                     <div class="col-md-6">
                       <div class="form-group">
+                        <label for="contact-phone" class="form-label">
+                          Teléfono / WhatsApp <span class="text-muted fw-normal">(Opcional)</span>
+                        </label>
                         <div class="input-with-icon">
                           <i class="bi bi-phone"></i>
-                          <input type="tel" class="form-control" formControlName="phone" placeholder="Tu Teléfono (Opcional)">
+                          <input 
+                            id="contact-phone"
+                            type="tel" 
+                            class="form-control" 
+                            formControlName="phone" 
+                            placeholder="+57 300 000 0000">
                         </div>
                       </div>
                     </div>
 
+                    <!-- Tipo de Proyecto / Servicio -->
                     <div class="col-md-6">
                       <div class="form-group">
+                        <label for="contact-category" class="form-label">
+                          Tipo de Proyecto o Servicio <span class="required">*</span>
+                        </label>
                         <div class="input-with-icon">
                           <i class="bi bi-tag"></i>
-                          <select class="form-control" formControlName="category" required="">
-                            <option value="">Selecciona una Categoría</option>
-                            <option value="Asesoría Técnica">Asesoría Técnica</option>
-                            <option value="Desarrollo de Software">Desarrollo de Software</option>
-                            <option value="Mantenimiento & Soporte">Mantenimiento & Soporte</option>
-                            <option value="Página Web / Landing Page">Página Web / Landing Page</option>
+                          <select 
+                            id="contact-category"
+                            class="form-control" 
+                            formControlName="category" 
+                            required>
+                            <option value="" disabled selected>Selecciona una categoría de servicio</option>
+                            <option value="Desarrollo Full Stack (Angular / Spring Boot)">Desarrollo Full Stack (Angular / Spring Boot / Laravel)</option>
+                            <option value="Consultoría & Arquitectura de Software">Consultoría & Arquitectura de Software (Hexagonal / Microservicios)</option>
+                            <option value="DevOps, Cloud AWS & CI/CD">DevOps, Cloud AWS, Docker & CI/CD</option>
+                            <option value="Desarrollo Web / Landing Page">Desarrollo Web / Landing Page de Alto Rendimiento</option>
                             <option value="Aplicación Móvil">Aplicación Móvil</option>
-                            <option value="E-commerce / Tienda Online">E-commerce / Tienda Online</option>
-                            <option value="Otro">Otro</option>
+                            <option value="Auditoría de Seguridad & Código">Auditoría de Seguridad & Calidad de Código</option>
+                            <option value="Mantenimiento & Soporte Técnico">Mantenimiento & Soporte Continuo</option>
+                            <option value="Otro">Otro Requerimiento</option>
                           </select>
                         </div>
+                        @if (contactForm.get('category')?.invalid && contactForm.get('category')?.touched) {
+                          <span class="field-error">Por favor selecciona un tipo de proyecto.</span>
+                        }
                       </div>
                     </div>
 
+                    <!-- Asunto del Proyecto -->
                     <div class="col-md-6">
                       <div class="form-group">
-                        <div class="input-with-icon">
-                          <i class="bi bi-briefcase"></i>
-                          <select class="form-control" formControlName="service" required="">
-                            <option value="">Selecciona un Servicio</option>
-                            <option value="Asesoría Técnica">Asesoría Técnica</option>
-                            <option value="Desarrollo de Software">Desarrollo de Software</option>
-                            <option value="Mantenimiento & Soporte">Mantenimiento & Soporte</option>
-                            <option value="Otro">Otro</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="col-md-12">
-                      <div class="form-group">
+                        <label for="contact-subject" class="form-label">
+                          Asunto / Objetivo <span class="required">*</span>
+                        </label>
                         <div class="input-with-icon">
                           <i class="bi bi-text-left"></i>
-                          <input type="text" class="form-control" formControlName="subject" placeholder="Asunto del Proyecto" required="">
+                          <input 
+                            id="contact-subject"
+                            type="text" 
+                            class="form-control" 
+                            formControlName="subject" 
+                            placeholder="Ej. Desarrollo de API bancaria o Rediseño Web" 
+                            required>
                         </div>
+                        @if (contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched) {
+                          <span class="field-error">Por favor indica el asunto de tu consulta.</span>
+                        }
                       </div>
                     </div>
 
+                    <!-- Mensaje / Detalles -->
                     <div class="col-12">
                       <div class="form-group">
+                        <label for="contact-message" class="form-label">
+                          Detalles del Proyecto o Necesidad <span class="required">*</span>
+                        </label>
                         <div class="input-with-icon">
                           <i class="bi bi-chat-dots message-icon"></i>
-                          <textarea class="form-control" formControlName="message" placeholder="Describe tu proyecto, requerimientos y cualquier información adicional..." style="height: 180px" required=""></textarea>
+                          <textarea 
+                            id="contact-message"
+                            class="form-control" 
+                            formControlName="message" 
+                            placeholder="Describe el alcance de tu proyecto, plazos estimados, tecnologías de interés o cualquier detalle relevante..." 
+                            required></textarea>
                         </div>
+                        @if (contactForm.get('message')?.invalid && contactForm.get('message')?.touched) {
+                          <span class="field-error">Por favor describe brevemente tu requerimiento (mínimo 10 caracteres).</span>
+                        }
                       </div>
                     </div>
 
-                    <div class="col-12 text-center">
-                      <button type="submit" class="btn btn-whatsapp btn-submit" [disabled]="contactForm.invalid">
+                    <!-- Botón Enviar WhatsApp -->
+                    <div class="col-12 text-center mt-4">
+                      <button 
+                        type="submit" 
+                        class="btn btn-whatsapp" 
+                        [disabled]="contactForm.invalid"
+                        aria-label="Enviar mensaje de contacto por WhatsApp">
                         <svg class="whatsapp-btn-icon" viewBox="0 0 24 24" fill="currentColor">
                           <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.488"/>
                         </svg>
