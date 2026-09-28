@@ -43,7 +43,7 @@ export class YoutubeService {
               publishedAt: v.snippet.publishedAt,
               thumbnailUrl: v.snippet.thumbnails.medium?.url ?? v.snippet.thumbnails.high?.url ?? v.snippet.thumbnails.default?.url ?? '',
             }))
-            .sort((a, b) => new Date(a.publishedAt).getTime() - new Date(b.publishedAt).getTime())
+            .sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime())
         )
       );
   }

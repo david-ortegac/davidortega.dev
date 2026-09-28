@@ -25,8 +25,29 @@ export class TutorialsComponent implements OnInit {
 
   ngOnInit() {
     this.setupSEO();
-    this.initializeService().then((data) => {
-      this.validateService(data.value);
+    this.loadTutorials();
+  }
+
+  private loadTutorials(): void {
+    this.backService.getTutorials(12, 'newest').subscribe({
+      next: (videos) => {
+        const sorted = [...videos].sort(
+          (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+        );
+        this.videos.set(sorted);
+        this.isLoading.set(false);
+      },
+      error: () => {
+        // Fallback: intentar por el método de secrets + youtubeService
+        this.initializeService()
+          .then((data) => {
+            this.validateService(data.value);
+          })
+          .catch(() => {
+            this.hasError.set(true);
+            this.isLoading.set(false);
+          });
+      }
     });
   }
 

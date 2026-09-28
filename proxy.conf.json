@@ -1,7 +1,7 @@
 {
   "/api": {
-    "target": "https://ghasecrets.davidortega.dev",
-    "secure": false,
+    "target": "https://wwhxc3snl7.execute-api.us-east-1.amazonaws.com",
+    "secure": true,
     "changeOrigin": true,
     "logLevel": "debug",
     "pathRewrite": {

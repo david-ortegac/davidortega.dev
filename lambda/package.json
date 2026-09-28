@@ -1,0 +1,22 @@
+{
+  "name": "tutorials-lambda-service",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "AWS Lambda service in TypeScript to securely serve YouTube tutorials and secrets for davidortega.dev",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "bun run build:bundle && node package-zip.js",
+    "build:bundle": "bun build ./src/index.ts --target=node --format=cjs --outfile=./dist/index.js --minify",
+    "dev": "bun run ./src/local.ts",
+    "deploy": "node deploy.mjs",
+    "start": "node ./dist/index.js"
+  },
+  "keywords": ["aws", "lambda", "youtube", "typescript"],
+  "author": "David Ortega",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.147",
+    "@types/node": "^22.13.0",
+    "typescript": "^5.7.0"
+  }
+}
